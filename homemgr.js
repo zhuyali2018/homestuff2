@@ -5,15 +5,19 @@ var path = require('path')
 var formidable = require('formidable');
 
 //a file checker to make sure no overwriting of an existing file
-function getGoodFn(path) {
-  var fn = path;
+function getGoodFn(pathfn) {
+  var fn = pathfn;
+  var ext = path.extname(fn);
+  var base = path.basename(fn, ext);
+  var rout = path.dirname(fn);
+
   var i = 1;
   for (; ;) {
     try {
       if (fs.existsSync(fn)) {
         if (i > 100) //try 100 times
           return "badname_" + i;
-        fn = path + "_" + i;
+        fn = rout + "\\" + base + "_" + i + ext;
       } else {
         return fn;
       }
@@ -98,14 +102,14 @@ function requestHandler(req, res) {
         imgname = imgname + ext;
       }
       var oldpath = files.filetoupload.path;
-      //var newpath = '/Users/yali/homestuff/images/' + imgname;
       var newpath = './images/' + imgname;
       var newpath1 = getGoodFn(newpath);
+      var newfn=path.basename(newpath1);      //filename only
       console.log("debug 4: " + imgname);
       console.log("oldpath: " + oldpath);
       console.log("newpath: " + newpath1);
       console.log("orgname: " + orgname);
-      add_record(itemID + "^" + parentID + "^" + itemName + "^" + "::images\\" + imgname + "^" + desp + "^nodetail\n");
+      add_record(itemID + "^" + parentID + "^" + itemName + "^" + "::images/" + newfn + "^" + desp + "^nodetail\n");
       fs.rename(oldpath, newpath1, function (err) {
         if (err) throw err;
       });
@@ -118,3 +122,4 @@ function requestHandler(req, res) {
 }
 
 var server = http.createServer(requestHandler).listen(8080);
+console.log("InfoMgr ver 3.21");
