@@ -89,7 +89,7 @@ function requestHandler(req, res) {
       console.log("oldpath: "+oldpath);
       console.log("newpath: "+newpath1);
       console.log("orgname: "+orgname);
-      add_record(itemID+ "^" +parentID+ "^" +itemName+"^"+"::images\\"+imgname+"^nodetail\n");
+      add_record(itemID+ "^" +parentID+ "^" +itemName+"^"+"::images\\"+imgname+"^"+desp+"^nodetail\n");
       fs.rename(oldpath, newpath1, function (err) {
         if (err) throw err;
       });
