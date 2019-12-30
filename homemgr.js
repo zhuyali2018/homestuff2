@@ -1,4 +1,5 @@
 var http = require('http');
+var os = require( 'os' );
 var url = require('url');
 var fs = require('fs');
 var path = require('path')
@@ -123,3 +124,6 @@ function requestHandler(req, res) {
 
 var server = http.createServer(requestHandler).listen(8080);
 console.log("InfoMgr ver 3.21");
+var networkInterfaces = os.networkInterfaces( );
+var myip=networkInterfaces['Wi-Fi'][1]['address'];
+console.log("Use this url:  http://"+myip+":8080/")
