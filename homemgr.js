@@ -45,14 +45,14 @@ function response8(req, res, pid, iid) {
   const stritem = '<th align="right">Item ID:</th><th align="left"><input type="text" placeholder="My ID" name="itemID" value="yyyyyyyyyy" style="height: 40px;"><br></th>';
   res.write(stritem.replace('yyyyyyyyyy', '' + iid));
   res.write('</tr><tr>');
-  res.write('<th align="right">Name:</th><th align="left"><input type="text" placeholder="name" name="name" size="40" style="height: 40px;"><br></th>');
+  res.write('<th align="right"><br><br>Name:</th><th align="left"><br><br><input type="text" placeholder="name" name="name" size="40" style="height: 40px;"><br></th>');
   res.write('</tr><tr>');
-  res.write('<th align="right">Description:</th><th align="left"><input type="text" placeholder="Description" name="description" size="60" style="height: 40px;"><br></th>');
+  res.write('<th align="right"><br><br>Description:</th><th align="left"><br><br><input type="text" placeholder="Description" name="description" size="60" style="height: 40px;"><br></th>');
   res.write('</tr><tr>');
-  res.write('<th align="right"><input type="text" placeholder="Name your file" name="imagename" style="height: 30px;" ><br></th>');
-  res.write('<th align="left"><input type="file" name="filetoupload"><br></th>');
+  res.write('<th align="right"><br><br><input type="text" placeholder="Name your file" name="imagename" style="height: 30px;" ><br></th>');
+  res.write('<th align="left"><br><br><input type="file" name="filetoupload"><br></th>');
   res.write('</tr><tr><br><br>');
-  res.write('<th align="right"><input type="submit" style="height: 30px;"></th><th> </th>');
+  res.write('<th align="right"><br><br><br><br><input type="submit" style="height: 30px;"></th><th> </th>');
   res.write('</tr></table></form></font></body></html>');
 
   res.end();
@@ -84,7 +84,7 @@ function add_record(line) {
 function requestHandler(req, res) {
   console.log("debug 1:" + req.url)
   var now = new Date();
-  var datestamp = "(" + now.getFullYear() + "-" + now.getMonth() + "-" + now.getDate() + ")";
+  var datestamp = "(" + now.getFullYear() + "-" + (now.getMonth()+1) + "-" + now.getDate() + ")";
   if (req.url == '/fileupload') {
     console.log("debug 2");
     //var q = url.parse(req.url, true).query;
@@ -122,8 +122,8 @@ function requestHandler(req, res) {
   }
 }
 
-var server = http.createServer(requestHandler).listen(8080);
+var server = http.createServer(requestHandler).listen(8084);
 console.log("InfoMgr ver 3.21");
 var networkInterfaces = os.networkInterfaces( );
 var myip=networkInterfaces['Wi-Fi'][1]['address'];
-console.log("Use this url:  http://"+myip+":8080/")
+console.log("Use this url:  http://"+myip+":8084/")
