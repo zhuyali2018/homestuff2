@@ -113,7 +113,7 @@ function nokids(res,id,string){
            res.write(" open: false,  type: Tree.FOLDER,  selected: false,  children: [ ");
            parentshown=true;         //remember the parent structure already printed, do it only once for all kids that follow 
          }
-         showitem(res,myobj);        //show kids one by one
+         showitem(res,myobj);        //show kids one by one, not its self, if it has children
        }
      }
   }
@@ -234,6 +234,8 @@ console.log("homequery ver 2.00");
 
 var networkInterfaces = os.networkInterfaces( );
 //console.log(networkInterfaces);
-var myip=networkInterfaces['Wi-Fi'][1]['address'];
-//var myip=networkInterfaces['eth1'][0]['address'];
+
+//var myip=networkInterfaces['Wi-Fi'][1]['address'];
+var myip=networkInterfaces['eth1'][0]['address'];
+
 console.log("Use this url:  http://"+myip+":8089/")
