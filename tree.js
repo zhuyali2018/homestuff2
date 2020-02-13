@@ -195,26 +195,41 @@
       details.dataset.loaded = false;
     }
     browse(validate, es = this.siblings()) {
+      if(this.clear_matched){
+         [...this.parent.querySelectorAll('.matched')].forEach(e => e.classList.remove('matched'));
+         this.clear_matched=false;
+      }
+      var ret_value=false;
       for (const e of es) {
-        if (validate(e)) {
+        var node_status=validate(e);
+        if (node_status) {
           this.select(e);
+          if (node_status == 1){
+              this.match(e);   //<==added showing matched item yellow in color
+              ret_value=true;   //once true, always true for the same parent
+          }
           if (e.dataset.type === SimpleTree.FILE) {
-            return this.emit('browse', e);
+            //return this.emit('browse', e);
+            this.emit('browse', e);
+            continue;
           }
           const parent = e.closest('details');
-          if (parent.open) {
-            return this.browse(validate, this.children(parent));
+          if(this.browse(validate, this.children(parent))){  //if return true, it means it has children matching
+             ret_value=true;   //once true, always true for the same parent and grand parents
+             if(!parent.open) {   //if not open, open it
+                window.setTimeout(() => {
+                   this.once('open', () => this.browse(validate, this.children(parent)));
+                   this.open(parent);
+                }, 0);
+             }
           }
-          else {
-            window.setTimeout(() => {
-              this.once('open', () => this.browse(validate, this.children(parent)));
-              this.open(parent);
-            }, 0);
-            return;
-          }
+          continue;
+        }else{
+          console.log("validate returns false for this node: "+e.node.name);
         }
       }
       this.emit('browse', false);
+      return ret_value;
     }
   }
 
@@ -277,6 +292,14 @@
       target.classList.add('selected');
       this.focus(target);
       this.emit('select', target);
+    }
+    match(target){
+      const summary = target.querySelector('summary');
+      if (summary) {
+        target = summary;
+      }
+      [...this.parent.querySelectorAll('.selected')].forEach(e => e.classList.remove('selected'));
+      target.classList.add('matched');
     }
     active() {
       return this.parent.querySelector('.selected');

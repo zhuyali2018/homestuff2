@@ -148,6 +148,7 @@ function requestHandler(req, res) {
      res.write(mystyle);     //style sheet printed here
      res.write('</style>');
      res.write('</head><body>');
+     res.write('<input type="text" id="searchtext" autofocus> <input type="button" id="searchbn" value="Search"> <p>');
      res.write(  '<div id="tree"></div> <script>');
      res.write(myscript);
      res.write( '</script> <script>\'use strict\';');
@@ -171,6 +172,19 @@ function requestHandler(req, res) {
      res.write(  "tree.on('fetch', e => console.log('fetch', e));");
      res.write(  "tree.on('browse', e => console.log('browse', e));");
      
+     res.write(  "document.getElementById('searchbn').addEventListener('click', () => {");
+     res.write(  "  tree.clear_matched=true;");
+     res.write(  "  console.log('===================================================');");
+     res.write(  "  var str=document.getElementById('searchtext').value;");
+     res.write(  "  tree.browse(a => {"); 
+     res.write(  "     if(a.node.name.search(str) != -1){");
+     res.write(  "       return 1;");
+     res.write(  "     }else if(a.node.type === 'folder'){");
+     res.write(  "       return 2;");
+     res.write(  "     }");
+     res.write(  "     return 0;");
+     res.write(  "  });");
+     res.write(  "});");
      res.write(   'var structure = [');
      //==============loop through and display root nodes only==========================
      for(var i in mystuff) {
