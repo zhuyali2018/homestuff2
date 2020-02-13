@@ -70,7 +70,6 @@
     file(node, parent = this.parent, before) {
       parent = parent.closest('details');
       node = this.interrupt(node);
-      console.log("=================>",node.name);
       const a = this.append(Object.assign(document.createElement('a'), {
         textContent: node.name,
         href: '#'
