@@ -196,11 +196,11 @@ function requestHandler(req, res) {
      res.write(  "  tree.clear_matched=true;");
      res.write(  "  var str=document.getElementById('searchtext').value;");
      res.write(  "  tree.browse(a => {"); 
-     res.write(  "     if(a.node.name.search(str) != -1){");
+     res.write(  "     if(a.node.name.toLowerCase().search(str.toLowerCase()) != -1){");
      res.write(  "       return 1;");
-     res.write(  "     }else if(a.node.desp.search(str) !== -1){");
+     res.write(  "     }else if(a.node.desp.toLowerCase().search(str.toLowerCase()) !== -1){");
      res.write(  "       return 1;");
-     res.write(  "     }else if(a.node.imag.search(str) !== -1){");
+     res.write(  "     }else if(a.node.imag.toLowerCase().search(str.toLowerCase()) !== -1){");
      res.write(  "       return 1;");
      res.write(  "     }else if(a.node.type === 'folder'){");
      res.write(  "       return 2;");
