@@ -200,6 +200,8 @@ function requestHandler(req, res) {
      res.write(  "       return 1;");
      res.write(  "     }else if(a.node.desp.search(str) !== -1){");
      res.write(  "       return 1;");
+     res.write(  "     }else if(a.node.imag.search(str) !== -1){");
+     res.write(  "       return 1;");
      res.write(  "     }else if(a.node.type === 'folder'){");
      res.write(  "       return 2;");
      res.write(  "     }");
