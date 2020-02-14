@@ -230,7 +230,27 @@ function requestHandler(req, res) {
      res.write('<body>');
      res.write('<center>stuff detail</center>');
      res.write('<p id="imglnk">stuff detail</p>');
+
+     res.write('<button onclick="rotate_no()">No ROTATION</button>');
+     res.write('<button onclick="rotate_right()">ROTATE right</button>');
+     res.write('<button onclick="rotate_left()">ROTATE left</button>');
+     res.write('<button onclick="showwidth()">Show Width</button>');
+     res.write('<button onclick="increasewidth()">increase Width</button>');
+     res.write('<button onclick="decreasewidth()">decrease Width</button>');
+
+     res.write('<p id="demo"><p><p><p><p><p>');
      res.write('  <img id="img" src="http://10.14.147.88:8080/image1.png" alt="Smiley face" height="600" width="1000">');
+
+     res.write('<script>');
+     res.write('function rotate_right() { document.getElementById("img").style = "transform:rotate(90deg);";}');
+     res.write('function rotate_left() {  document.getElementById("img").style = "transform:rotate(270deg);";}');
+     res.write('function rotate_no() {  document.getElementById("img").style = "transform:rotate(0deg);";}');
+     res.write('function showwidth() {   document.getElementById("demo").innerHTML="width="+document.getElementById("img").width;}');
+     res.write('function increasewidth() {   document.getElementById("img").width=document.getElementById("img").width+10;}');
+     res.write('function decreasewidth() {   document.getElementById("img").width=document.getElementById("img").width-10;}');
+     res.write('</script>');
+     res.write('');
+
      res.write('</body>');
      res.write('</html>');
      res.end();
