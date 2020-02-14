@@ -7,6 +7,26 @@ var readline = require('readline');
 var mystyle="";
 var myscript="";
 
+//find my ip address
+function get_my_ip(){
+  var flag=false;
+  var ret="Unknown";
+  var netifs = os.networkInterfaces( );
+  for ( var i in netifs){
+     for ( var j in netifs[i]){
+        if(netifs[i][j]['family']=="IPv4"){
+           ret=netifs[i][j]['address'];
+           if(ret != "127.0.0.1"){
+             flag=true;
+             break;
+           }
+        }   
+     }
+     if(flag) break;
+  }
+  return ret;
+}
+var myip=get_my_ip();
 //load the style sheet for the html page
 function loadstylesheet(filename){
   fs.readFile(filename, function(err, data) {
@@ -158,8 +178,8 @@ function requestHandler(req, res) {
      res.write(  "tree.on('select', e => { ");
      res.write(  "   try { ");
      res.write(  "         parent.frames['frame2'].document.getElementById('desp').innerHTML=e.node.desp;");
-     res.write(  "         parent.frames['frame3'].document.getElementById('imglnk').innerHTML='http://192.168.1.84:8080/'+e.node.imag.substring(9);");
-     res.write(  "         parent.frames['frame3'].document.getElementById('img').src='http://192.168.1.84:8080/'+e.node.imag.substring(9);");
+     res.write(  "         parent.frames['frame3'].document.getElementById('imglnk').innerHTML='http://"+myip+":8080/'+e.node.imag.substring(9);");
+     res.write(  "         parent.frames['frame3'].document.getElementById('img').src='http://"+myip+":8080/'+e.node.imag.substring(9);");
      //res.write(  "   console.log(e);");
      //res.write(  "   console.log(e.node);");
      //res.write(  "   console.log(e.node.desp);");
@@ -239,7 +259,7 @@ function requestHandler(req, res) {
      res.write('<button onclick="decreasewidth()">decrease Width</button>');
 
      res.write('<p id="demo"><p><p><p><p><p>');
-     res.write('  <img id="img" src="http://10.14.147.88:8080/image1.png" alt="Smiley face" height="600" width="1000">');
+     res.write('  <img id="img" src="http://10.14.147.88:8080/image1.png" alt="Smiley face" width="1000">');
 
      res.write('<script>');
      res.write('function rotate_right() { document.getElementById("img").style = "transform:rotate(90deg);";}');
@@ -265,12 +285,6 @@ loadstylesheet("tree.css");
 loadinffile();     //load tree data file homestuff.inf
 
 var server = http.createServer(requestHandler).listen(8089);
-console.log("homequery ver 2.00");
-
-var networkInterfaces = os.networkInterfaces( );
-//console.log(networkInterfaces);
-
-//var myip=networkInterfaces['Wi-Fi'][1]['address'];
-var myip=networkInterfaces['eth1'][0]['address'];
+console.log("homequery ver 3.00");
 
 console.log("Use this url:  http://"+myip+":8089/")
