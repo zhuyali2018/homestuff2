@@ -144,8 +144,9 @@ function nokids(res,id,string){
   return flag;
 }
 
-function requestHandler(req, res) {
-  if (req.url == "/") {   //main page
+//////////////////////////////////
+//load main page html file
+function mainpage(res){
     res.writeHead(200, { 'Content-Type': 'text/html' });
     res.write('<!DOCTYPE html>');
     res.write('<html><head><meta charset="UTF-8"></head>');
@@ -158,9 +159,51 @@ function requestHandler(req, res) {
     res.write('</frameset>');
     res.write('</html>');
     res.end();
-    console.log("Main Page done");
-  }else if(req.url == '/homestufftree.html'){
-     console.log("requestiong page 1:"+req.url);
+}
+
+function description_page(res){
+     res.write('<!DOCTYPE html>');
+     res.write('<html><head><meta charset="UTF-8">');
+     res.write('<h2><center>description</center></h2>');
+     res.write('</head><body>');
+     res.write('<p id="desp">description</p>');
+     res.write('</body>');
+     res.write('</html>');
+     res.end();
+}
+
+function detail_page(res){
+     res.write('<!DOCTYPE html>');
+     res.write('<html><head><meta charset="UTF-8"></head>');
+     res.write('<body>');
+     res.write('<center>stuff detail</center>');
+     res.write('<p id="imglnk">stuff detail</p>');
+
+     res.write('<button onclick="rotate_no()">No ROTATION</button>');
+     res.write('<button onclick="rotate_right()">ROTATE right</button>');
+     res.write('<button onclick="rotate_left()">ROTATE left</button>');
+     res.write('<button onclick="showwidth()">Show Width</button>');
+     res.write('<button onclick="increasewidth()">increase Width</button>');
+     res.write('<button onclick="decreasewidth()">decrease Width</button>');
+
+     res.write('<p id="demo"><p><p><p><p><p>');
+     res.write('  <img id="img" src="http://10.14.147.88:8080/image1.png" alt="Smiley face" width="1000">');
+
+     res.write('<script>');
+     res.write('function rotate_right() { document.getElementById("img").style = "transform:rotate(90deg);";}');
+     res.write('function rotate_left() {  document.getElementById("img").style = "transform:rotate(270deg);";}');
+     res.write('function rotate_no() {  document.getElementById("img").style = "transform:rotate(0deg);";}');
+     res.write('function showwidth() {   document.getElementById("demo").innerHTML="width="+document.getElementById("img").width;}');
+     res.write('function increasewidth() {   document.getElementById("img").width=document.getElementById("img").width+10;}');
+     res.write('function decreasewidth() {   document.getElementById("img").width=document.getElementById("img").width-10;}');
+     res.write('</script>');
+     res.write('');
+
+     res.write('</body>');
+     res.write('</html>');
+     res.end();
+}
+function tree_page(res){
      res.writeHead(200, { 'Content-Type': 'text/html' });
      res.write('<!DOCTYPE html>');
      res.write('<html><head><meta charset="UTF-8">');
@@ -170,32 +213,29 @@ function requestHandler(req, res) {
      res.write('</head><body>');
      res.write('<input type="text" id="searchtext" autofocus> <input type="button" id="searchbn" value="Search"> <p>');
      res.write(  '<div id="tree"></div> <script>');
-     res.write(myscript);
+     res.write(myscript);    // tree.js script inserted here
      res.write( '</script> <script>\'use strict\';');
      res.write(  " var tree = new Tree(document.getElementById('tree'), { navigate: true });");
      res.write(  "tree.on('created', (e, node) => { e.node = node; });");
      res.write(  "tree.on('open', e => console.log('open', e));");
-     res.write(  "tree.on('select', e => { ");
+     res.write(  "tree.on('select', e => { ");      //select trigger is set here for clicking on a tree node, where e.node is where the node info passed in.
      res.write(  "   try { ");
-     res.write(  "         parent.frames['frame2'].document.getElementById('desp').innerHTML=e.node.desp;");
-     res.write(  "         parent.frames['frame3'].document.getElementById('imglnk').innerHTML='http://"+myip+":8080/'+e.node.imag.substring(9);");
-     res.write(  "         parent.frames['frame3'].document.getElementById('img').src='http://"+myip+":8080/'+e.node.imag.substring(9);");
-     //res.write(  "   console.log(e);");
-     //res.write(  "   console.log(e.node);");
-     //res.write(  "   console.log(e.node.desp);");
+     res.write(  "         parent.frames['frame2'].document.getElementById('desp').innerHTML=e.node.desp;");  //desp info goes to frame2.desp
+     res.write(  "         parent.frames['frame3'].document.getElementById('imglnk').innerHTML='http://"+myip+":8080/'+e.node.imag.substring(9);");   //imglnk info goes to frame3.imglnk
+     res.write(  "         parent.frames['frame3'].document.getElementById('img').src='http://"+myip+":8080/'+e.node.imag.substring(9);");   //img src info goes to frame3.img
      res.write(  "   }catch(err){ ");
      res.write(  "      console.log('Error caught: '+err);");
      res.write(  "   }");
      res.write(  " });");
 
      res.write(  "tree.on('action', e => console.log('action', e));");
-     res.write(  "tree.on('fetch', e => console.log('fetch', e));");
+     res.write(  "tree.on('fetch',  e => console.log('fetch',  e));");
      res.write(  "tree.on('browse', e => console.log('browse', e));");
-     
+
      res.write(  "document.getElementById('searchbn').addEventListener('click', () => {");
      res.write(  "  tree.clear_matched=true;");
      res.write(  "  var str=document.getElementById('searchtext').value;");
-     res.write(  "  tree.browse(a => {"); 
+     res.write(  "  tree.browse(a => {");
      res.write(  "     if(a.node.name.toLowerCase().search(str.toLowerCase()) != -1){");
      res.write(  "       return 1;");
      res.write(  "     }else if(a.node.desp.toLowerCase().search(str.toLowerCase()) !== -1){");
@@ -228,58 +268,28 @@ function requestHandler(req, res) {
      res.write(   'tree.json(structure);');
      res.write('</script></body></html>');
      res.end();
+}
+function requestHandler(req, res) {
+  if (req.url == "/") {   //main page
+    mainpage(res);
+    console.log("Main Page done");
+  }else if(req.url == '/homestufftree.html'){
+     console.log("requestiong page 1:"+req.url);
+     tree_page(res);
      console.log("Page done");
-     loadinffile();    //reload inf file for next request
-
+     loadinffile();    //reload inf file for next request. without this line, the refresh button wont work
      //--------------------------------------------------------------------
      console.log("home stuff tree done");
   }else if(req.url == '/description.html'){
      console.log("requestiong page 2:"+req.url);
-     res.write('<!DOCTYPE html>');
-     res.write('<html><head><meta charset="UTF-8">');
-     res.write('<h2><center>description</center></h2>');
-     res.write('</head><body>');
-     res.write('<p id="desp">description</p>');
-     res.write('</body>');
-     res.write('</html>');
-     res.end();
+     description_page(res);
      console.log("description page done");
-
   }else if(req.url == '/detail.html'){
      console.log("requestiong page 3:"+req.url);
-     res.write('<!DOCTYPE html>');
-     res.write('<html><head><meta charset="UTF-8"></head>');
-     res.write('<body>');
-     res.write('<center>stuff detail</center>');
-     res.write('<p id="imglnk">stuff detail</p>');
-
-     res.write('<button onclick="rotate_no()">No ROTATION</button>');
-     res.write('<button onclick="rotate_right()">ROTATE right</button>');
-     res.write('<button onclick="rotate_left()">ROTATE left</button>');
-     res.write('<button onclick="showwidth()">Show Width</button>');
-     res.write('<button onclick="increasewidth()">increase Width</button>');
-     res.write('<button onclick="decreasewidth()">decrease Width</button>');
-
-     res.write('<p id="demo"><p><p><p><p><p>');
-     res.write('  <img id="img" src="http://10.14.147.88:8080/image1.png" alt="Smiley face" width="1000">');
-
-     res.write('<script>');
-     res.write('function rotate_right() { document.getElementById("img").style = "transform:rotate(90deg);";}');
-     res.write('function rotate_left() {  document.getElementById("img").style = "transform:rotate(270deg);";}');
-     res.write('function rotate_no() {  document.getElementById("img").style = "transform:rotate(0deg);";}');
-     res.write('function showwidth() {   document.getElementById("demo").innerHTML="width="+document.getElementById("img").width;}');
-     res.write('function increasewidth() {   document.getElementById("img").width=document.getElementById("img").width+10;}');
-     res.write('function decreasewidth() {   document.getElementById("img").width=document.getElementById("img").width-10;}');
-     res.write('</script>');
-     res.write('');
-
-     res.write('</body>');
-     res.write('</html>');
-     res.end();
+     detail_page(res);
      console.log("detail page done");
   }else 
      console.log("requestiong page x:"+req.url);
-
 }
 
 loadscript("tree.js");
