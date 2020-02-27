@@ -5,6 +5,27 @@ var fs = require('fs');
 var path = require('path')
 var formidable = require('formidable');
 
+//find my ip address
+function get_my_ip(){
+  var flag=false;
+  var ret="Unknown";
+  var netifs = os.networkInterfaces( );
+  for ( var i in netifs){
+     for ( var j in netifs[i]){
+        if(netifs[i][j]['family']=="IPv4"){
+           ret=netifs[i][j]['address'];
+           if(ret != "127.0.0.1"){
+             flag=true;
+             break;
+           }
+        }
+     }
+     if(flag) break;
+  }
+  return ret;
+}
+var myip=get_my_ip();
+
 //a file checker to make sure no overwriting of an existing file
 function getGoodFn(pathfn) {
   var fn = pathfn;
@@ -123,7 +144,6 @@ function requestHandler(req, res) {
 }
 
 var server = http.createServer(requestHandler).listen(8084);
-console.log("InfoMgr ver 3.21");
+console.log("InfoMgr ver 3.22");
 var networkInterfaces = os.networkInterfaces( );
-var myip=networkInterfaces['Wi-Fi'][1]['address'];
 console.log("Use this url:  http://"+myip+":8084/")
