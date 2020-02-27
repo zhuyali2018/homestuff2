@@ -2,10 +2,22 @@ var http = require('http');
 var os = require( 'os' );
 var url = require('url');
 var fs = require('fs');
+var path=require('path');
 var readline = require('readline');
 
+var port="8085";             //listening port
 var mystyle="";
 var myscript="";
+var mime = {
+   html: 'text/html',
+    txt: 'text/plain',
+    css: 'text/css',
+    gif: 'image/gif',
+    jpg: 'image/jpeg',
+    png: 'image/png',
+    svg: 'image/svg+xml',
+     js: 'application/javascript'
+};
 
 //find my ip address
 function get_my_ip(){
@@ -194,8 +206,8 @@ function detail_page(res){
      res.write('function rotate_left() {  document.getElementById("img").style = "transform:rotate(270deg);";}');
      res.write('function rotate_no() {  document.getElementById("img").style = "transform:rotate(0deg);";}');
      res.write('function showwidth() {   document.getElementById("demo").innerHTML="width="+document.getElementById("img").width;}');
-     res.write('function increasewidth() {   document.getElementById("img").width=document.getElementById("img").width+10;}');
-     res.write('function decreasewidth() {   document.getElementById("img").width=document.getElementById("img").width-10;}');
+     res.write('function increasewidth() {   document.getElementById("img").width=document.getElementById("img").width+100;}');
+     res.write('function decreasewidth() {   document.getElementById("img").width=document.getElementById("img").width-50;}');
      res.write('</script>');
      res.write('');
 
@@ -219,13 +231,13 @@ function tree_page(res){
      res.write(  "tree.on('created', (e, node) => { e.node = node; });");
      res.write(  "tree.on('open', e => console.log('open', e));");
      res.write(  "tree.on('select', e => { ");      //select trigger is set here for clicking on a tree node, where e.node is where the node info passed in.
-     res.write(  "   try { ");
-     res.write(  "         parent.frames['frame2'].document.getElementById('desp').innerHTML=e.node.desp;");  //desp info goes to frame2.desp
-     res.write(  "         parent.frames['frame3'].document.getElementById('imglnk').innerHTML='http://"+myip+":8080/'+e.node.imag.substring(9);");   //imglnk info goes to frame3.imglnk
-     res.write(  "         parent.frames['frame3'].document.getElementById('img').src='http://"+myip+":8080/'+e.node.imag.substring(9);");   //img src info goes to frame3.img
-     res.write(  "   }catch(err){ ");
-     res.write(  "      console.log('Error caught: '+err);");
-     res.write(  "   }");
+     res.write(  "  try { ");
+     res.write(  "    parent.frames['frame2'].document.getElementById('desp').innerHTML=e.node.desp;");  //desp info goes to frame2.desp
+     res.write(  "    parent.frames['frame3'].document.getElementById('imglnk').innerHTML='http://"+myip+":"+port+"/images/'+e.node.imag.substring(9);");   //imglnk info goes to frame3.imglnk
+     res.write(  "    parent.frames['frame3'].document.getElementById('img').src='http://"+myip+":"+port+"/images/'+e.node.imag.substring(9);");   //img src info goes to frame3.img
+     res.write(  "  }catch(err){ ");
+     res.write(  "    console.log('Error caught: '+err);");
+     res.write(  "  }");
      res.write(  " });");
 
      res.write(  "tree.on('action', e => console.log('action', e));");
@@ -288,6 +300,21 @@ function requestHandler(req, res) {
      console.log("requestiong page 3:"+req.url);
      detail_page(res);
      console.log("detail page done");
+  }else if(dirname="/images"){
+     var filename="."+req.url;
+     var type = mime[path.extname(filename).slice(1)] || 'text/plain';
+     var s = fs.createReadStream(filename);
+     console.log("Serving : "+ filename);
+     s.on('open', function () {
+       res.setHeader('Content-Type', type);
+       s.pipe(res);
+     });
+     s.on('error', function () {
+        console.log("file not found:"+filename);
+        res.setHeader('Content-Type', 'text/plain');
+        res.statusCode = 404;
+        res.end('Not found');
+     });
   }else 
      console.log("requestiong page x:"+req.url);
 }
@@ -296,7 +323,8 @@ loadscript("tree.js");
 loadstylesheet("tree.css");
 loadinffile();     //load tree data file homestuff.inf
 
-var server = http.createServer(requestHandler).listen(8089);
-console.log("homequery ver 3.00");
+//var server = http.createServer(requestHandler).listen(8089);
+var server = http.createServer(requestHandler).listen(port);
+console.log("homequery ver 3.10");
 
-console.log("Use this url:  http://"+myip+":8089/")
+console.log("Use this url:  http://"+myip+":"+port);
