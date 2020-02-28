@@ -5,7 +5,10 @@ var fs = require('fs');
 var path=require('path');
 var readline = require('readline');
 
+//setting section
 var port="8085";             //listening port
+var showid=true;             //show object id in description or not
+
 var mystyle="";
 var myscript="";
 var mime = {
@@ -118,6 +121,7 @@ function showitem(res,string){
       //res.write( "{name:'"+string[2]+"-"+id+"="+pid+"'},");
       res.write( "{name:'"+string[2]+"',");
       res.write( " imag:'"+string[3]+"',");
+      res.write( " obid:'"+string[0]+"',");
       res.write( " desp:'"+string[4]+"'},");
    }
 }
@@ -141,6 +145,7 @@ function nokids(res,id,string){
            //res.write("{ name: '"+pname+"',  open: false,  type: Tree.FOLDER,  selected: false,  children: [ ");
            res.write("{ name: '"+string[2]+"', ");
            res.write(" imag: '"+string[3]+"',");
+           res.write(" obid: '"+string[0]+"',");
            res.write(" desp: '"+string[4]+"',");
            res.write(" open: false,  type: Tree.FOLDER,  selected: false,  children: [ ");
            parentshown=true;         //remember the parent structure already printed, do it only once for all kids that follow 
@@ -178,6 +183,7 @@ function description_page(res){
      res.write('<html><head><meta charset="UTF-8">');
      res.write('<h2><center>description</center></h2>');
      res.write('</head><body>');
+     res.write('<p id="obid"></p>');
      res.write('<p id="desp">description</p>');
      res.write('</body>');
      res.write('</html>');
@@ -233,6 +239,8 @@ function tree_page(res){
      res.write(  "tree.on('select', e => { ");      //select trigger is set here for clicking on a tree node, where e.node is where the node info passed in.
      res.write(  "  try { ");
      res.write(  "    parent.frames['frame2'].document.getElementById('desp').innerHTML=e.node.desp;");  //desp info goes to frame2.desp
+ if(showid)
+     res.write(  "    parent.frames['frame2'].document.getElementById('obid').innerHTML='Object ID: '+e.node.obid;");  //desp info goes to frame2.desp
      res.write(  "    parent.frames['frame3'].document.getElementById('imglnk').innerHTML='http://"+myip+":"+port+"/images/'+e.node.imag.substring(9);");   //imglnk info goes to frame3.imglnk
      res.write(  "    parent.frames['frame3'].document.getElementById('img').src='http://"+myip+":"+port+"/images/'+e.node.imag.substring(9);");   //img src info goes to frame3.img
      res.write(  "  }catch(err){ ");
@@ -325,6 +333,6 @@ loadinffile();     //load tree data file homestuff.inf
 
 //var server = http.createServer(requestHandler).listen(8089);
 var server = http.createServer(requestHandler).listen(port);
-console.log("homequery ver 3.10");
+console.log("homequery ver 3.11");
 
 console.log("Use this url:  http://"+myip+":"+port);
