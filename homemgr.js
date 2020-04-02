@@ -37,7 +37,7 @@ function getGoodFn(pathfn) {
   for (; ;) {
     try {
       if (fs.existsSync(fn)) {
-        if (i > 100) //try 100 times
+        if (i > 1000) //try 1000 times
           return "badname_" + i;
         fn = rout + "\\" + base + "_" + i + ext;
       } else {

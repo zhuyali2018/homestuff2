@@ -260,6 +260,8 @@ function tree_page(res){
      res.write(  "       return 1;");
      res.write(  "     }else if(a.node.desp.toLowerCase().search(str.toLowerCase()) !== -1){");
      res.write(  "       return 1;");
+     res.write(  "     }else if(a.node.obid.toLowerCase().search(str.toLowerCase()) !== -1){");
+     res.write(  "       return 1;");
      res.write(  "     }else if(a.node.imag.toLowerCase().search(str.toLowerCase()) !== -1){");
      res.write(  "       return 1;");
      res.write(  "     }else if(a.node.type === 'folder'){");
