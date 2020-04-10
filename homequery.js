@@ -137,7 +137,7 @@ function nokids(res,id,string){
        if(IsMyParent(id,mypids)){  //is id one of the parents ?
          flag=false;          //flag as having kids
          if(mypids.parents==""){   //if no more parent
-            delete mystuff[i];     //delete the item
+            // No need to delete it! delete mystuff[i];     //delete the item
          }else{
             mystuff[i][1]=mypids.parents;   //if more parents to be attaced to in tree, just update list and leave it in the list
          }
@@ -335,6 +335,6 @@ loadinffile();     //load tree data file homestuff.inf
 
 //var server = http.createServer(requestHandler).listen(8089);
 var server = http.createServer(requestHandler).listen(port);
-console.log("homequery ver 3.11");
+console.log("homequery ver 3.12");
 
 console.log("Use this url:  http://"+myip+":"+port);
