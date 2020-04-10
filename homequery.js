@@ -24,22 +24,26 @@ var mime = {
 
 //find my ip address
 function get_my_ip(){
-  var flag=false;
   var ret="Unknown";
   var netifs = os.networkInterfaces( );
+  var ips=new Object();
   for ( var i in netifs){
      for ( var j in netifs[i]){
         if(netifs[i][j]['family']=="IPv4"){
            ret=netifs[i][j]['address'];
            if(ret != "127.0.0.1"){
-             flag=true;
-             break;
+              //console.log(i+":"+ret);
+              ips[i]=ret;
            }
         }   
      }
-     if(flag) break;
   }
-  return ret;
+  if(ips['Wi-Fi'])
+      return ips['Wi-Fi']
+  if(ips['Ethernet 1']) return ips['Ethernet 1'];
+  if(ips['Ethernet 2']) return ips['Ethernet 2'];
+  if(ips['Ethernet 3']) return ips['Ethernet 3'];
+  return ips['Ethernet'];
 }
 var myip=get_my_ip();
 //load the style sheet for the html page
