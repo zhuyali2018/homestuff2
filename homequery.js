@@ -173,7 +173,7 @@ function mainpage(res){
     res.write('<html><head><meta charset="UTF-8"></head>');
     res.write('<frameset  cols="30%,70%" frameborder="1">');
     res.write('   <frame name="frame1" src="homestufftree.html">');
-    res.write('   <frameset rows="30%,70%" frameborder="1">');
+    res.write('   <frameset rows="15%,85%" frameborder="1">');
     res.write('      <frame name="frame2" src="description.html">');
     res.write('      <frame name="frame3" src="detail.html">');
     res.write('   </frameset>');
